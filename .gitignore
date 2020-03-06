@@ -9,3 +9,4 @@ doc/sphinx/build
 *.pdf
 test/kapp/sys/ys/calc/calc_openmpi
 .cache
+.venv2

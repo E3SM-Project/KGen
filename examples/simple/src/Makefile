@@ -5,7 +5,7 @@ COL := 4
 #PAPI_DIR := /path/to/PAPI
 #PAPI_LIB := ${PAPI_DIR}/lib/libpapi.a
 
-FC := ifort
+FC := ftn
 FC_FLAGS := -DROW=${ROW} -DCOL=${COL}
 
 run: build

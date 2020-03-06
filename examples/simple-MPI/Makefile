@@ -6,13 +6,14 @@ KGEN := ${KGEN_HOME}/bin/kgen
 SRC_DIR := ${PWD}/src
 SRC := ${SRC_DIR}/update_mod.F90
 CALLSITE := update_mod:update:calc
+MPI_INCLUDE := /opt/cray/pe/cray-mvapich2/2.3.1/infiniband/cray/9.0/include
 
 test:
 	${KGEN} \
-		--mpi enable \
-		--cmd-clean "cd ${SRC_DIR}; make -f Makefile.mpirun clean" \
-		--cmd-build "cd ${SRC_DIR}; make -f Makefile.mpirun build" \
-        --cmd-run "cd ${SRC_DIR}; make -f Makefile.mpirun run" \
+		--mpi header=${MPI_INCLUDE}/mpif.h \
+		--cmd-clean "cd ${SRC_DIR}; make -f Makefile.srun clean" \
+		--cmd-build "cd ${SRC_DIR}; make -f Makefile.srun build" \
+        --cmd-run "cd ${SRC_DIR}; make -f Makefile.srun run" \
         --data condition=and:"i == 2" \
 		${SRC}:${CALLSITE}
 
@@ -24,5 +25,5 @@ test:
 #        --rebuild all \
 
 clean:
-	${MAKE} -f Makefile.mpirun clean -C src
+	${MAKE} -f Makefile.srun clean -C src
 	rm -rf kernel state kgen.log _kgen_compflag_cmdwrapper.sh strace.log include.ini model model.ini elapsedtime coverage papi

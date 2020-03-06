@@ -84,7 +84,7 @@ class GenericCompiler(object):
                             break
                 else:
                     flags.append(item)
-            elif self.file_exts and item.split('.')[-1] in self.file_exts:
+            elif self.file_exts and '.' in item and item.split('.')[-1] in self.file_exts:
                 if item[0]=='/':
                     srcs.append(item)
                 else:
@@ -98,7 +98,7 @@ class GenericCompiler(object):
             return ([], [], [], [], [])
 
 class GenericFortranCompiler(GenericCompiler):
-    file_exts = ['f', 'f90', 'f95', 'f03', 'f08', '.ftn', 'F', 'F90', 'F95', 'F03', 'F08', '.FTN' ]
+    file_exts = ['f', 'f90', 'f95', 'f03', 'f08', 'ftn', 'F', 'F90', 'F95', 'F03', 'F08', 'FTN' ]
 
     def get_discard_opts_noarg(self):
         return super(GenericFortranCompiler, self).get_discard_opts_noarg()
@@ -187,15 +187,15 @@ class CrayFortranCompiler(GenericFortranCompiler):
     compid = 'crayftn'
     compnames = ['crayftn', 'ftn']
     openmp_opt = [ r'-omp', r'-h\s+omp' ]
-    # fpp is enabled by default
+    fpp = '-e F'
 
     discard_opts_arg = [ '-J' ]
 
     def get_discard_opts_noarg(self):
-        return super(IbmxlFortranCompiler, self).get_discard_opts_noarg() + self.discard_opts_noarg
+        return super(CrayFortranCompiler, self).get_discard_opts_noarg() + self.discard_opts_noarg
 
     def get_discard_opts_arg(self):
-        return super(IbmxlFortranCompiler, self).get_discard_opts_arg() + self.discard_opts_arg
+        return super(CrayFortranCompiler, self).get_discard_opts_arg() + self.discard_opts_arg
 
 class CompilerFactory(object):
 

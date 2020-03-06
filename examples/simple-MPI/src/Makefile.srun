@@ -5,11 +5,11 @@ COL := 4
 #PAPI_DIR := /path/to/PAPI
 #PAPI_LIB := ${PAPI_DIR}/lib/libpapi.a
 
-FC := ftn
+FC := ftn -e F #-rm
 FC_FLAGS := -DROW=${ROW} -DCOL=${COL}
 
 run: build
-	./demo.exe
+	srun -n 4 ./demo.exe
 
 build: demo.exe
 
@@ -26,4 +26,4 @@ calc_mod.o: calc_mod.F90
 	${FC} -c -o $@ $<
 
 clean:
-	rm -f *.exe *.o *.mod
+	rm -f *.exe *.o *.mod *.lst

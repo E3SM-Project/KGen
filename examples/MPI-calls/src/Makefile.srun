@@ -9,7 +9,7 @@ FC := ftn
 FC_FLAGS := -DROW=${ROW} -DCOL=${COL}
 
 run: build
-	./demo.exe
+	srun -n 4 ./demo.exe
 
 build: demo.exe
 

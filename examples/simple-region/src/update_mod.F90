@@ -5,6 +5,15 @@ CONTAINS
     SUBROUTINE update()
         INTEGER :: i, j
         real, dimension(ROW, COL) :: out2, out3, output
+
+        DO i=1, COL
+            DO j=1, ROW
+                output(j,i) = 0
+                out2(j,i) = 0
+                out3(j,i) = 0
+            END DO
+        END DO
+
         DO i=1, COL
             DO j=1, ROW
                 !$kgen begin_callsite calc

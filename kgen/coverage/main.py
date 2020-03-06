@@ -85,14 +85,15 @@ def visit(path, invokes, usedfiles, usedlines, mpivisits, ompvisits, rank):
 
                     with open(dfile, 'r') as f:
                         for line in f:
+                            if (len(line) < 17): continue
                             invoke = line[:16].strip()
-                            visit = int(line[16:].strip())
+                            nvisit = int(line[16:].strip())
                             
                             if invoke not in invokes[rank][tid]: invokes[rank][tid][invoke] = []
-                            invokes[rank][tid][invoke].append( (fid, lid, visit) )
+                            invokes[rank][tid][invoke].append( (fid, lid, nvisit) )
 
-                            mpivisits[fid][lid][rank] += visit 
-                            ompvisits[fid][lid][tid] += visit 
+                            mpivisits[fid][lid][rank] += nvisit 
+                            ompvisits[fid][lid][tid] += nvisit 
 
 def readdatafiles(inq, outq):
 

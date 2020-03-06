@@ -440,7 +440,7 @@ class Gen_ElapsedTime_File(Kgen_Plugin):
             #namedpart_append_gensnode(node.kgen_kernel_id, AFTER_CALLSITE, statements.Write, attrs=attrs)
             namedpart_append_gensnode(node.kgen_kernel_id, body_block, statements.Write, attrs=attrs)
 
-            attrs = {'specs': ['NEWUNIT=dataunit(OMP_GET_THREAD_NUM())', 'FILE=TRIM(ADJUSTL(datapath))', 'STATUS="UNKNOWN"', 'ACTION="WRITE"', 'ACCESS="APPEND"', 'IOSTAT=ierror']}
+            attrs = {'specs': ['NEWUNIT=dataunit(OMP_GET_THREAD_NUM())', 'FILE=TRIM(ADJUSTL(datapath))', 'STATUS="UNKNOWN"', 'ACTION="WRITE"', 'ACCESS="SEQUENTIAL"', 'POSITION="APPEND"', 'IOSTAT=ierror']}
             #part_append_gensnode(topobj, EXEC_PART, statements.Open, attrs=attrs)
             #namedpart_append_gensnode(node.kgen_kernel_id, AFTER_CALLSITE, statements.Open, attrs=attrs)
             namedpart_append_gensnode(node.kgen_kernel_id, body_block, statements.Open, attrs=attrs)
@@ -474,7 +474,7 @@ class Gen_ElapsedTime_File(Kgen_Plugin):
             #namedpart_append_gensnode(node.kgen_kernel_id, AFTER_CALLSITE, statements.Write, attrs=attrs)
             namedpart_append_gensnode(node.kgen_kernel_id, body_block, statements.Write, attrs=attrs)
 
-            attrs = {'specs': ['NEWUNIT=dataunit', 'FILE=TRIM(ADJUSTL(datapath))', 'ACTION="WRITE"', 'ACCESS="APPEND"', 'IOSTAT=ierror']}
+            attrs = {'specs': ['NEWUNIT=dataunit', 'FILE=TRIM(ADJUSTL(datapath))', 'ACTION="WRITE"', 'ACCESS="SEQUENTIAL"', 'POSITION="APPEND"', 'IOSTAT=ierror']}
             #part_append_gensnode(topobj, EXEC_PART, statements.Open, attrs=attrs)
             #namedpart_append_gensnode(node.kgen_kernel_id, AFTER_CALLSITE, statements.Open, attrs=attrs)
             namedpart_append_gensnode(node.kgen_kernel_id, body_block, statements.Open, attrs=attrs)

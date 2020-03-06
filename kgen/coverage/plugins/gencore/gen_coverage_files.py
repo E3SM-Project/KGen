@@ -498,7 +498,7 @@ class Gen_Coverage_File(Kgen_Plugin):
         attrs = {'expr': 'ierror .EQ. 0'}
         ifopen = part_append_gensnode(ifexist, EXEC_PART, block_statements.IfThen, attrs=attrs)
 
-        attrs = {'specs': ['UNIT=dataunit', 'SIZE=intnum']}
+        attrs = {'specs': ['UNIT=dataunit', 'RECL=intnum']}
         part_append_gensnode(ifopen, EXEC_PART, statements.Inquire, attrs=attrs)
 
         attrs = {'specs': [ 'UNIT=dataunit', 'REC=intnum/33', 'FMT="(2I16,1A)"' ], 'items': [ 'invokes', 'visits', 'dummychar' ]}

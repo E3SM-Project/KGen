@@ -119,7 +119,7 @@ class Extractor(KGTool):
                         with open('%s/%s/%s'%(Config.path['outdir'], Config.path['state'], filename), 'wb') as fd:
                             fd.write(slines)
 
-            with open('%s/%s/%s'%(Config.path['outdir'], Config.path['kernel'], '%s.f90'%Config.kernel_driver['name']), 'wb') as fd:
+            with open('%s/%s/%s'%(Config.path['outdir'], Config.path['kernel'], '%s.F90'%Config.kernel_driver['name']), 'wb') as fd:
                 set_indent('')
                 lines = driver.tostring()
                 if lines is not None:
@@ -185,7 +185,7 @@ class Extractor(KGTool):
 
         #basenames
         callsite_base = os.path.basename(Config.callsite['filepath'])
-        driver_base = '%s.f90'%Config.kernel_driver['name']
+        driver_base = '%s.F90'%Config.kernel_driver['name']
         dep_base_srcfiles = [ os.path.basename(filepath) for filepath, srclist in Config.used_srcfiles.iteritems() ]
         dep_bases = dep_base_srcfiles + [ driver_base ]
 
@@ -196,7 +196,7 @@ class Extractor(KGTool):
         # dependency
         depends = OrderedDict()
 
-        # dependency for kernel_driver.f90
+        # dependency for kernel_driver.F90
         depends[driver_base] = ' '.join(all_objs_srcfiles + [self.obj(KGUTIL), self.obj(TPROF) ])
 
         # dependency for other files
@@ -257,6 +257,8 @@ class Extractor(KGTool):
                         opts += ' -cpp '
                     elif compname.startswith('pg'):
                         opts += ' -Mpreprocess '
+                    elif compname.startswith('ftn'):
+                        opts += ' -e F '
                 opts += ' -D KGEN_COVERAGE # Comment out "-D KGEN_COVERAGE" to turn off coverage feature.'
 
             if Config.add_mpi_frame["enabled"]:

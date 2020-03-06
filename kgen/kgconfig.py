@@ -155,7 +155,7 @@ class Config(object):
     
         # KGEN version
         self._attrs['kgen'] = collections.OrderedDict()
-        self._attrs['kgen']['version'] = [ 0, 8, '1' ]
+        self._attrs['kgen']['version'] = [ 0, 9, '0' ]
 
         # KGEN operation mode
         self._attrs['check_mode'] = False
