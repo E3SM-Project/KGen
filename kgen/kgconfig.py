@@ -170,6 +170,7 @@ class Config(object):
         self._attrs['machine']['compiler']['gnu'] = ''
         self._attrs['machine']['compiler']['intel'] = ''
         self._attrs['machine']['compiler']['pgi'] = ''
+        self._attrs['machine']['compiler']['cray'] = ''
         self._attrs['machine']['variable'] = collections.OrderedDict()
         self._attrs['machine']['variable']['work_directory'] = os.path.expandvars('${HOME}/kgen_workspace')
 
