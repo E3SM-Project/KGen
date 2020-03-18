@@ -1,0 +1,110 @@
+
+This example shows how to use KGEN to extract a kernel from a simple Fortran application.
+
+[ Prerequisites ]
+	1. Python Version >= 2.7 and < 3.0
+	2. cpp preprocessor
+	3. make
+	4. strace
+
+[ Kernel extraction steps ]
+
+	1. >> vi src/Makefile; # Modify FC if required
+
+	2. >> make; # extract a kernel
+
+	Once "make" is completed with success, you will see information similar to next lines on screen
+
+		../../bin/kgen \
+				--timing repeat=100 \
+				--invocation 0:0:1,0:0:2,0:0:3 \
+				--check tolerance=1.0D-14 \
+				--rebuild all \
+				${KGENHOME}/examples/simple/src/update_mod.F90 \
+				"cd ${KGENHOME}/examples/simple/src; make clean" \
+				"cd ${KGENHOME}/examples/simple/src; make build" \
+				"cd ${KGENHOME}/examples/simple/src; make run"
+		Starting KGen
+		Starting KOption
+		Building application to collect strace log file: ./strace.log
+		Creating KGen include file: ./include.ini
+		KOption is finished.
+		Starting KExt
+		Pre-processing is done
+		Reading ${KGENHOME}/examples/simple/src/update_mod.F90
+		Reading ${KGENHOME}/examples/simple/src/calc_mod.F90
+			in the search of "calc" directly from update_mod.F90 and originally from update_mod.F90
+		Program is analyzed
+		Kernel generation and instrumentation is completed.
+		Makefiles are generated
+		Post-processing is done
+		KExt is finished.
+		Generating state data files at ./state.
+		KGen is finished.
+
+	After this step, two subfolders(kernel and state) will be created under this folder.
+	Kernel files and state data files(calc.*.*.*) should be created in kernel folder.
+	In state folder, KGen-instrumented files are created.
+
+    NOTE: If compilation happens at different directory other than examples/src folder, please add following KGen flag similar to following:
+        --source alias=/your/examples/src:/somewhere/compilation/happens
+
+	3. >> cd kernel; # move to a kernel directory
+
+	4. >> make; # build and run a kernel
+
+	In this step, the generated kernel will be built/run and verfication and timing information will be displayed on screen.
+
+		ifort  -c -o kgen_utils.o kgen_utils.f90
+		ifort  -c -o calc_mod.o calc_mod.F90
+		ifort  -c -o update_mod.o update_mod.F90
+		ifort  -c -o kernel_driver.o kernel_driver.f90
+		ifort    -o kernel.exe update_mod.o calc_mod.o kernel_driver.o kgen_utils.o
+		./kernel.exe
+		 
+		 ***************** Verification against 'calc.0.0.1' *****************
+		 
+		 Number of verified variables:            3
+		 Number of identical variables:            3
+		 Number of non-identical variables within tolerance:            0
+		 Number of non-identical variables out of tolerance:            0
+		 Tolerance:   1.000000000000000E-014
+		 
+		 Verification PASSED
+		 
+		 calc : Time per call (usec):   1.999999955296516E-002
+		 
+		 ***************** Verification against 'calc.0.0.2' *****************
+		 
+		 Number of verified variables:            3
+		 Number of identical variables:            3
+		 Number of non-identical variables within tolerance:            0
+		 Number of non-identical variables out of tolerance:            0
+		 Tolerance:   1.000000000000000E-014
+		 
+		 Verification PASSED
+		 
+		 calc : Time per call (usec):   1.999999955296516E-002
+		 
+		 ***************** Verification against 'calc.0.0.3' *****************
+		 
+		 Number of verified variables:            3
+		 Number of identical variables:            3
+		 Number of non-identical variables within tolerance:            0
+		 Number of non-identical variables out of tolerance:            0
+		 Tolerance:   1.000000000000000E-014
+		 
+		 Verification PASSED
+		 
+		 calc : Time per call (usec):   1.999999955296516E-002
+		 
+		****************************************************
+			kernel execution summary: calc
+		****************************************************
+			Total number of verification cases  :     3
+			Number of verification-passed cases :     3
+		 
+			Average call time (usec):  0.200E-01
+			Minimum call time (usec):  0.200E-01
+			Maximum call time (usec):  0.200E-01
+		****************************************************
