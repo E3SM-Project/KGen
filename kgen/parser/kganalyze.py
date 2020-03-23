@@ -5,7 +5,7 @@ from kgconfig import Config
 from kgutils import KGName, ProgramException, UserException, traverse
 from kgparse import KGGenType, SrcFile, ResState
 from Fortran2003 import Name, Call_Stmt, Function_Reference, Part_Ref, Interface_Stmt, Actual_Arg_Spec_List, \
-    Section_Subscript_List, Actual_Arg_Spec, Structure_Constructor_2
+    Section_Subscript_List, Actual_Arg_Spec, Structure_Constructor_2, Proc_Component_Ref
 from collections import OrderedDict
 from typedecl_statements import TypeDeclarationStatement
 from block_statements import SubProgramStatement, Associate
@@ -76,13 +76,23 @@ def update_state_info(parent):
                                             elif isinstance(arglist, Actual_Arg_Spec):
                                                 argobj = lineage[lidx+1]
                                                 kword = argobj.items[0].string
-                                                argidx = subpobj.args.index(kword)
+                                                argidx = 0
+
+                                                if kword in subpobj.args:
+                                                    argidx = subpobj.args.index(kword)
+                                                
                                             elif isinstance(arglist, Actual_Arg_Spec_List):
                                                 argobj = lineage[lidx+2]
-                                                argidx = arglist.items.index(argobj)
                                                 if isinstance(argobj, Actual_Arg_Spec):
+                                                    argidx = arglist.items.index(argobj)
                                                     kword = argobj.items[0].string
-                                                    argidx = subpobj.args.index(kword)
+                                                    if kword in subpobj.args:
+                                                        argidx = subpobj.args.index(kword)
+
+                                                elif isinstance(argobj, (Name, Proc_Component_Ref)):
+                                                    argidx = arglist.items.index(argobj)
+                                                else:
+                                                    raise Exception("Not implemented to handle: %s", argobj.__class__.__name__)
                                             else:
                                                 argidx = 0
                                         elif anc.__class__ == Part_Ref:
@@ -105,6 +115,9 @@ def update_state_info(parent):
 
                                     # get intent
                                     if argidx>=0:
+                                        if argidx >= len(subpobj.args):
+                                            raise Exception("argument index exceeds the length of arg. list: %d >= %d",
+                                                argidx, len(subpobj.args))
                                         argname = subpobj.args[argidx]
                                         var = subpobj.a.variables[subpobj.args[argidx]]
                                         if var.is_intent_out() or var.is_intent_inout():
