@@ -1172,4 +1172,10 @@ def search_Binding_PASS_Arg_Name(stmt, node, gentype=None):
     #import pdb ;pdb.set_trace()
 
     pass
- 
+  
+def search_Char_Selector(stmt, node, gentype=None):
+
+    get_name_or_defer(stmt, node.items[0], res_value)
+    get_name_or_defer(stmt, node.items[1], res_value)
+
+
