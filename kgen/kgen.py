@@ -1,6 +1,6 @@
 '''main.py
 
-KGen main function
+KGen main entry function
 '''
 
 import os
