@@ -23,5 +23,5 @@ class Perturb_K_Callsite_File(Kgen_Plugin):
         namedpart_append_comment(node.kgen_kernel_id, partname, '')
         namedpart_append_comment(node.kgen_kernel_id, partname, 'Uncomment following call statement to turn on perturbation experiment.')
         namedpart_append_comment(node.kgen_kernel_id, partname, 'Adjust perturbation value and/or kind parameter if required.')
-        namedpart_append_comment(node.kgen_kernel_id, partname, 'CALL kgen_perturb_real( your_variable, 1.0E-15_8 )')
+        namedpart_append_comment(node.kgen_kernel_id, partname, 'CALL kgen_perturb_real( your_variable, 1.0D-15 )')
         namedpart_append_comment(node.kgen_kernel_id, partname, '')

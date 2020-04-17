@@ -429,6 +429,7 @@ class Config(object):
         self.parser.add_option("--machinefile", dest="machinefile", action='store', type='string', default=None, help="Specifying machinefile")
         self.parser.add_option("--debug", dest="debug", action='append', type='string', help=optparse.SUPPRESS_HELP)
         self.parser.add_option("--logging", dest="logging", action='append', type='string', help=optparse.SUPPRESS_HELP)
+        self.parser.add_option("--stop-at", dest="stopat",  type='string', help="stop KGen before completion")
 
         ###############################################################
         # Add extraction options
