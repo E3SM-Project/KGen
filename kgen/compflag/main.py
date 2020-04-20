@@ -28,7 +28,8 @@ class CompFlag(kgtool.KGTool):
         stracepath = '%s/%s'%(Config.path['outdir'], Config.stracefile)
         includepath = '%s/%s'%(Config.path['outdir'], Config.includefile)
 
-        if not os.path.exists(stracepath) or 'all' in Config.rebuild or 'strace' in Config.rebuild:
+        #if not os.path.exists(stracepath) or 'all' in Config.rebuild or 'strace' in Config.rebuild:
+        if not os.path.exists(includepath) or 'all' in Config.rebuild or 'include' in Config.rebuild:
 
             # clean app.
             if Config.cmd_clean['cmds']:
@@ -66,10 +67,10 @@ class CompFlag(kgtool.KGTool):
             else:
                 cmdstr = Config.cmd_build['cmds']
 
+            kgutils.logger.info('Collecting strace log')
+
             #bld_cmd = 'strace -o %s -f -q -s 100000 -e trace=execve -v -- /bin/sh -c "%s"'%(stracepath, cmdstr)
             bld_cmd = 'strace -f -q -s 100000 -e trace=execve -v -- /bin/sh -c "%s"'% cmdstr
-
-            kgutils.logger.info('Creating KGen strace logfile: %s'%stracepath)
 
             try:
 
@@ -154,17 +155,8 @@ class CompFlag(kgtool.KGTool):
                 #kgutils.logger.error('%s\n%s'%(err, out))
                 raise
         else:
-            kgutils.logger.info('Reusing KGen strace logfile: %s'%stracepath)
+            kgutils.logger.info('Reusing KGen include file: %s'%includepath)
 
-#        # parse strace.log and generate include.ini
-#        if not os.path.exists(includepath) or 'all' in Config.rebuild or 'include' in Config.rebuild:
-#            if stracepath:
-#                self._geninclude(stracepath, includepath)
-#            else:
-#                kgutils.logger.error('strace logfile is not found at: %s'%stracepath)
-#                kgutils.kgenexit('Please retry KGen after generting strace logfile.')
-#        else:
-#            kgutils.logger.info('Reusing KGen include file: %s'%includepath)
 
     def _getpwd(self, env):
         for item in env:
