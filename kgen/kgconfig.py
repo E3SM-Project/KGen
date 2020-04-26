@@ -204,6 +204,8 @@ class Config(object):
         self._attrs['path']['coverage'] = 'coverage'
         self._attrs['path']['etime'] = 'elapsedtime'
         self._attrs['path']['papi'] = 'papi'
+        self._attrs['path']['tmpsrcdir'] = 'srcfiles'
+        self._attrs['path']['tmpsrcmap'] = 'srcmap.txt'
 
         # source file parameters
         self._attrs['source'] = collections.OrderedDict()
@@ -1139,7 +1141,11 @@ class Config(object):
             elif lsection=='compiler':
                 for option in Inc.options(section):
                     incattrs[lsection][option] = Inc.get(section, option).strip()
-            elif os.path.isfile(section):
+            else:
+                tmpsrc = Inc.get(section, "tmpsrcid").strip()
+                if not os.path.isfile(section) and os.path.isfile(tmpsrc):
+                    shutil.copyfile(tmpsrc, section)
+
                 realpath = os.path.realpath(section)
                 if not incattrs['file'].has_key(realpath):
                     incattrs['file'][realpath] = collections.OrderedDict()
@@ -1155,9 +1161,6 @@ class Config(object):
                         incattrs['file'][realpath][option] = Inc.get(section, option)
                     else:
                         incattrs['file'][realpath]['macro'][option] = Inc.get(section, option)
-            else:
-                pass
-                #print '%s is either not suppored keyword or can not be found. Ignored.' % section
 
         # dupulicate paths per each alias
         newpath = set() 

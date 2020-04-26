@@ -3,6 +3,7 @@
 
 import os
 import stat
+import shutil
 import subprocess
 import kgtool
 import kgutils
@@ -25,8 +26,9 @@ class CompFlag(kgtool.KGTool):
     def run(self):
 
         # build app.
-        stracepath = '%s/%s'%(Config.path['outdir'], Config.stracefile)
-        includepath = '%s/%s'%(Config.path['outdir'], Config.includefile)
+        stracepath = os.path.join(Config.path['outdir'], Config.stracefile)
+        includepath = os.path.join(Config.path['outdir'], Config.includefile)
+        tmpsrcdir = os.path.abspath(os.path.join(Config.path['outdir'], Config.path['tmpsrcdir']))
 
         #if not os.path.exists(stracepath) or 'all' in Config.rebuild or 'strace' in Config.rebuild:
         if not os.path.exists(includepath) or 'all' in Config.rebuild or 'include' in Config.rebuild:
@@ -74,6 +76,11 @@ class CompFlag(kgtool.KGTool):
 
             try:
 
+                if not os.path.exists(tmpsrcdir):
+                    os.makedirs(tmpsrcdir)
+
+                tmpsrcid = 0
+
                 flags = {}
 
                 process = subprocess.Popen(bld_cmd, stdin=subprocess.PIPE, \
@@ -109,10 +116,17 @@ class CompFlag(kgtool.KGTool):
                                                 srcs, incs, macros, openmp, options = compiler.parse_option(cmdlist, self._getpwd(env))
                                                 if len(srcs)>0:
                                                     for src in srcs:
+                                                        tmpsrc = os.path.join(tmpsrcdir, str(tmpsrcid))
+
                                                         if src in flags:
-                                                            flags[src].append((exepath, incs, macros, openmp, options))
+                                                            flags[src].append((exepath, incs, macros, openmp, options, tmpsrc))
                                                         else:
-                                                            flags[src] = [ (exepath, incs, macros, openmp, options) ]
+                                                            flags[src] = [ (exepath, incs, macros, openmp, options, tmpsrc) ]
+                                                        # cp file to tmpsrcdir
+                                                        shutil.copyfile(src, os.path.join(tmpsrc))
+
+                                                        tmpsrcid += 1
+
                                     except Exception as err:
                                         raise
                                         pass
@@ -127,11 +141,13 @@ class CompFlag(kgtool.KGTool):
                         incs = incitems[-1][1]
                         macros = incitems[-1][2]
                         options = incitems[-1][4]
+                        tmpsrcid = incitems[-1][5]
 
                         if cfg.has_section(fname):
                             print 'Warning: %s section is dupulicated.' % fname
                         else:
                             cfg.add_section(fname)
+                            cfg.set(fname,'tmpsrcid', tmpsrcid)
                             cfg.set(fname,'compiler', compiler)
                             cfg.set(fname,'compiler_options', ' '.join(options))
                             cfg.set(fname,'include',':'.join(incs))
@@ -145,13 +161,11 @@ class CompFlag(kgtool.KGTool):
                 #out, err, retcode = kgutils.run_shcmd(bld_cmd)
                 if retcode != 0 and os.path.exists(stracepath):
                     os.remove(stracepath)
-                    print("SS", line)
                     kgutils.logger.error('%s\n%s'%(err, out))
             except Exception as err:
                 if os.path.exists(stracepath):
                     os.remove(stracepath)
-                print("TT", err)
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 #kgutils.logger.error('%s\n%s'%(err, out))
                 raise
         else:

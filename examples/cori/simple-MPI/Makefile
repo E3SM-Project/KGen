@@ -26,4 +26,4 @@ test:
 
 clean:
 	${MAKE} -f Makefile.srun clean -C src
-	rm -rf kernel state kgen.log _kgen_compflag_cmdwrapper.sh strace.log include.ini model model.ini elapsedtime coverage papi
+	rm -rf kernel state kgen.log _kgen_compflag_cmdwrapper.sh strace.log include.ini model model.ini elapsedtime coverage papi srcfiles
