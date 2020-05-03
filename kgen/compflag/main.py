@@ -116,17 +116,29 @@ class CompFlag(kgtool.KGTool):
                                                 srcs, incs, macros, openmp, options = compiler.parse_option(cmdlist, self._getpwd(env))
                                                 if len(srcs)>0:
                                                     for src in srcs:
-                                                        tmpsrc = os.path.join(tmpsrcdir, str(tmpsrcid))
+
+                                                        #if src not in flags:
+                                                        #    flags[src] = [ (exepath, incs, macros, openmp, options, tmpsrc) ]
+
+                                                        #    if os.path.isfile(src):
+                                                        #        shutil.copyfile(src, os.path.join(tmpsrc))
 
                                                         if src in flags:
-                                                            flags[src].append((exepath, incs, macros, openmp, options, tmpsrc))
+                                                            #tmpsrc = flags[src][0][5]
+                                                            #flags[src].append((exepath, incs, macros, openmp, options, tmpsrc))
+
+                                                            flags[src].append((exepath, incs, macros, openmp, options))
+
                                                         else:
-                                                            flags[src] = [ (exepath, incs, macros, openmp, options, tmpsrc) ]
-                                                        # cp file to tmpsrcdir
-                                                        shutil.copyfile(src, os.path.join(tmpsrc))
+                                                            #tmpsrc = os.path.join(tmpsrcdir, str(tmpsrcid))
 
-                                                        tmpsrcid += 1
+                                                            #flags[src] = [ (exepath, incs, macros, openmp, options, tmpsrc) ]
+                                                            flags[src] = [ (exepath, incs, macros, openmp, options) ]
 
+                                                            # cp file to tmpsrcdir
+                                                            if os.path.isfile(src):
+                                                                #shutil.copyfile(src, os.path.join(tmpsrc))
+                                                                tmpsrcid += 1
                                     except Exception as err:
                                         raise
                                         pass
@@ -141,13 +153,13 @@ class CompFlag(kgtool.KGTool):
                         incs = incitems[-1][1]
                         macros = incitems[-1][2]
                         options = incitems[-1][4]
-                        tmpsrcid = incitems[-1][5]
+                        #tmpsrcid = incitems[-1][5]
 
                         if cfg.has_section(fname):
                             print 'Warning: %s section is dupulicated.' % fname
                         else:
                             cfg.add_section(fname)
-                            cfg.set(fname,'tmpsrcid', tmpsrcid)
+                            #cfg.set(fname,'tmpsrcid', tmpsrcid)
                             cfg.set(fname,'compiler', compiler)
                             cfg.set(fname,'compiler_options', ' '.join(options))
                             cfg.set(fname,'include',':'.join(incs))

@@ -1142,11 +1142,15 @@ class Config(object):
                 for option in Inc.options(section):
                     incattrs[lsection][option] = Inc.get(section, option).strip()
             else:
-                tmpsrc = Inc.get(section, "tmpsrcid").strip()
-                if not os.path.isfile(section) and os.path.isfile(tmpsrc):
-                    shutil.copyfile(tmpsrc, section)
+                #tmpsrc = Inc.get(section, "tmpsrcid").strip()
+                #if not os.path.isfile(section) and os.path.isfile(tmpsrc):
+                #    shutil.copyfile(tmpsrc, section)
 
                 realpath = os.path.realpath(section)
+
+                if not os.path.exists(realpath):
+                    print("WARNING: '%s' does not exist. It may cause failure of KGen analysis." % realpath)
+
                 if not incattrs['file'].has_key(realpath):
                     incattrs['file'][realpath] = collections.OrderedDict()
                     incattrs['file'][realpath]['path'] = ['.']

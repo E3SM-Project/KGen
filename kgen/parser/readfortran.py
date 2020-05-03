@@ -408,7 +408,7 @@ class FortranReaderBase(object):
                         return fn
 
             for fn in Config.include['file'].keys():
-                if module_in_file(mod_name, fn):
+                if os.path.isfile(fn) and module_in_file(mod_name, fn):
                     if fn is not None:
                         return fn
             # end of KGEN addition
