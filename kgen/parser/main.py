@@ -23,7 +23,8 @@ class Parser(kgtool.KGTool):
         # read source file that contains callsite stmt
         cs_file = kgparse.SrcFile(Config.callsite['filepath'])
         if len(Config.callsite['stmts'])==0:
-            raise kgutils.UserException('Can not find callsite')
+            raise kgutils.UserException('Can not find callsite: %s' %
+                        Config.callsite['filepath'])
 
         # add geninfo to ancestors
         ancs = Config.callsite['stmts'][0].ancestors()
