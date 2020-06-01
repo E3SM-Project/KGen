@@ -384,7 +384,9 @@ class FortranReaderBase(object):
         return '%s(%r, %r, %r)' % (self.__class__.__name__, self.source, self.isfree, self.isstrict)
 
     def find_module_source_file(self, mod_name):
+
         from utils import get_module_file, module_in_file
+
         if self.source_only:
             for sf in self.source_only:
                 if module_in_file(mod_name, sf):
@@ -406,7 +408,7 @@ class FortranReaderBase(object):
                         return fn
 
             for fn in Config.include['file'].keys():
-                if module_in_file(mod_name, fn):
+                if os.path.isfile(fn) and module_in_file(mod_name, fn):
                     if fn is not None:
                         return fn
             # end of KGEN addition
