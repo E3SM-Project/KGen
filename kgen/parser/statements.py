@@ -431,7 +431,7 @@ class ComputedGoto(Statement):
     def analyze(self): return
 
     # start of KGEN addition
-    def tofortran(self):
+    def tokgen(self):
         return  'GO TO (%s) %s' % (', '.join(self.items), self.expr)
     # end of KGEN addition
 

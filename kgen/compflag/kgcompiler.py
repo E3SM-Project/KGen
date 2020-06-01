@@ -71,6 +71,10 @@ class GenericCompiler(object):
                 if len(item)>2:
                     macros.append(self._getmacro(item[2:]))
                 else: dflag = True
+            elif item.startswith('-WF,-D'):
+                if len(item)>6:
+                    macros.append(self._getmacro(item[6:]))
+                else: dflag = True
             elif self.openmp_opt and any(not re.match(r'%s\Z'%pattern, item) is None for pattern in self.openmp_opt):
                     openmp.append(item)
             elif item.startswith('-'):
@@ -172,8 +176,10 @@ class NagFortranCompiler(GenericFortranCompiler):
         return super(NagFortranCompiler, self).get_discard_opts_arg() + self.discard_opts_arg
 
 class IbmxlFortranCompiler(GenericFortranCompiler):
+
     compid = 'xlf'
-    compnames = ['xlf', 'xlf90', 'xlf95', 'xlf2003', 'xlf2008']
+    compnames = ['xlf', 'xlf90', 'xlf95', 'xlf2003', 'xlf_r', 'xlf90_r',
+                 'xlf95_r', 'xlf2003_r', 'xlf2008', 'xlf2008_r', 'fort77']
     openmp_opt = [ r'-qsmp' ]
     fpp = '-WF,-qfpp'
 

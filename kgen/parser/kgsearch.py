@@ -337,7 +337,8 @@ def search_Signed_Int_Literal_Constant(stmt, node, gentype=None):
 def search_Real_Literal_Constant(stmt, node, gentype=None): 
     """ Identifying a name in Real_Literal_Constant node"""
     if node.items[1]:
-        get_name_or_defer(stmt, Fortran2003.Name(node.items[1]), res_typedecl)
+        if not node.items[1].isdigit():
+            get_name_or_defer(stmt, Fortran2003.Name(node.items[1]), res_typedecl)
 
 def search_Signed_Real_Literal_Constant(stmt, node, gentype=None): 
     """ Identifying a name in Signed_Real_Literal_Constant node"""
