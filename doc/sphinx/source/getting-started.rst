@@ -13,9 +13,9 @@ The latest KGen version can be downloaded from KGen github repository.
 
 ::
 
-    git clone git://github.com/kgen/kgen.git
+    git clone git@github.com:E3SM-Project/KGen.git
 
-.. Github (latest development): https://github.com/kgen/kgen/
+.. Github (latest development): https://github.com/E3SM-Project/KGen
 
 ----------
 Installing
